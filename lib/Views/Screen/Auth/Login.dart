@@ -70,12 +70,12 @@ class Login extends StatelessWidget {
                         ),
                         //////////////////////////Input Email/////////////////////////////
                         InputForm(
-                            labelText: "Username",
-                            hintText: "Username",
+                            labelText: "Email",
+                            hintText: "Email",
                             iconData: Icons.person,
-                            controller: controller.username,
+                            controller: controller.email,
                             validator: (vall) {
-                              return validateInput(vall!, 50, 6, "username");
+                              return validateInput(vall!, 50, 6, "email");
                             }),
                         SizedBox(
                           height: controller.size.screenHeight! * 0.03,

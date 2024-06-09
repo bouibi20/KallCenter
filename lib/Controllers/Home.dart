@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:kallcenter/Core/Class/SizeScreenConfig.dart';
 import 'package:kallcenter/Views/Screen/InSideBottomBar/Commandes.dart';
 import 'package:kallcenter/Views/Screen/InSideBottomBar/Dashboard.dart';
+import 'package:kallcenter/Views/Screen/InSideBottomBar/Setting.dart';
 
 abstract class HomeController extends GetxController {
   next(int index);
@@ -10,11 +11,10 @@ abstract class HomeController extends GetxController {
 
 class HomeControllerImp extends HomeController {
   SizeScreenConfig size = Get.put(SizeScreenConfig(), permanent: true);
-  // late TabController _tabController;
   final List screens = [
     Dashboard(),
     Commandes(),
-    Scaffold(),
+    Setting(),
   ];
   int currentIndex = 0;
   String text = "hello word from controller";

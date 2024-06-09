@@ -8,8 +8,10 @@ class ColorsApp {
   static const Color red = Color.fromARGB(255, 255, 0, 0);
 
   static const Color whiteLite = Color.fromARGB(255, 235, 235, 235);
+  static const Color bgcolor = Color(0xffE7EEFC);
 
-  static const Color black = Colors.black;
+  static const Color black = Color(0Xff475467);
+  static const Color blackkk = Color.fromARGB(255, 71, 84, 103);
 
   static const Color green = Color.fromARGB(255, 8, 155, 8);
 
@@ -25,5 +27,5 @@ class ColorsApp {
 
   static const Color SecondColor = Color.fromARGB(255, 242, 137, 21);
 
-  static const Color PrimaryColor = Color.fromARGB(255, 39, 80, 159);
+  static const Color PrimaryColor = Color.fromARGB(255, 45, 80, 159);
 }
