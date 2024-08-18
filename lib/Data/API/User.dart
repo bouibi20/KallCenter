@@ -7,6 +7,7 @@ import 'package:kallcenter/Core/Class/StatusRequest.dart';
 import 'package:kallcenter/Core/Constante/Api_Links.dart';
 import 'package:kallcenter/Core/Function/CheckInternet.dart';
 import 'package:kallcenter/Data/Repository/User.dart';
+import 'package:kallcenter/Data/model/Statistics_Model.dart';
 import 'package:kallcenter/Data/model/Strore.dart';
 import 'package:kallcenter/Data/model/User.dart';
 import 'package:dartz/dartz.dart';
@@ -105,29 +106,56 @@ class UserAPI extends User_Repository {
   //     return left(StatusRequest.offlinefailure);
   //   }
   // }
+  @override
+  Future<Either<StatusRequest, dynamic>> getstatistic(User_Model users) async {
+    try {
+      if (await CheckInternet()) {
+        var response =
+            await http.get(Uri.parse("${urlAPI}/client/statistics"), headers: {
+          'Accept': 'application/json',
+          'Authorization': users.token!,
+        });
 
-  // @override
-  // Future<Either<StatusRequest, dynamic>> CheckStatus(User_Model users) async {
-  //   try {
-  //     if (await CheckInternet()) {
-  //       var response =
-  //           await http.post(Uri.parse("${urlAPI}/getdatauser"), headers: {
-  //         'Accept': 'application/json',
-  //         'Authorization': users.token!,
-  //       });
-  //       if (response.statusCode == 200 || response.statusCode == 201) {
-  //         var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
-  //         users = User_Model.fromJsonUpdate(jsonResponse, users);
-  //         return right(users);
-  //       } else {
-  //         return left(StatusRequest.serveurfailure);
-  //       }
-  //     } else {
-  //       return left(StatusRequest.offlinefailure);
-  //     }
-  //   } catch (e) {
-  //     print("you hane an error: $e");
-  //     return left(StatusRequest.offlinefailure);
-  //   }
-  // }
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+          print("///////////////////2222222222//////////////////////");
+          return right(Statistics_Model.fromJsontolist(jsonResponse));
+        } else {
+          return left(StatusRequest.serveurfailure);
+        }
+      } else {
+        return left(StatusRequest.offlinefailure);
+      }
+    } catch (e) {
+      print("you hane an error: $e");
+      return left(StatusRequest.offlinefailure);
+    }
+  }
+
+  @override
+  Future<Either<StatusRequest, dynamic>> getOrder(
+      int idStore, User_Model users) async {
+    try {
+      if (await CheckInternet()) {
+        var response =
+            await http.get(Uri.parse("${urlAPI}/client/orders"), headers: {
+          'Accept': 'application/json',
+          'Authorization': users.token!,
+        });
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          var jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+          print("///////////////////2222222222//////////////////////");
+          return right(Statistics_Model.fromJsontolist(jsonResponse));
+        } else {
+          return left(StatusRequest.serveurfailure);
+        }
+      } else {
+        return left(StatusRequest.offlinefailure);
+      }
+    } catch (e) {
+      print("you hane an error: $e");
+      return left(StatusRequest.offlinefailure);
+    }
+  }
 }

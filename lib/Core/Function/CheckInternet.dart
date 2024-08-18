@@ -26,10 +26,10 @@ Future<bool> CheckInternet() async {
       return true;
     } else {
       print("You don't have internet connectivity");
-      return false;
+      return true;
     }
   } catch (e) {
     print("Error checking internet connectivity: $e");
-    return false;
+    return true;
   }
 }

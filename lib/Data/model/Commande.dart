@@ -7,7 +7,7 @@ class Commandes_Model {
   late String? client;
   late double? price;
   late String? city;
-  late String? adress;
+  late String? address;
   late List<Product_Model> products;
   late String? state;
   late String? color;
@@ -17,7 +17,7 @@ class Commandes_Model {
       this.id,
       this.reference,
       this.client,
-      this.adress,
+      this.address,
       this.city,
       this.phone,
       this.price,
@@ -33,7 +33,7 @@ class Commandes_Model {
     client = json['client'];
     price = json['price'];
     city = json['city'];
-    adress = json['adress'];
+    address = json['adress'];
     products.addAll(Product_Model.fromJsontolist(json['products']));
     created_at = json['created_at'];
   }

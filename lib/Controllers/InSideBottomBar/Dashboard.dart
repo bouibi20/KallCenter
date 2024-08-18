@@ -3,32 +3,43 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:kallcenter/Core/Class/MyDialog.dart';
 import 'package:kallcenter/Core/Class/SizeScreenConfig.dart';
+import 'package:kallcenter/Core/Class/StatusRequest.dart';
 import 'package:kallcenter/Core/Constante/ColorsApp.dart';
 import 'package:kallcenter/Core/Constante/RoutesApp.dart';
+import 'package:kallcenter/Core/Function/DefaultDialogCheckIn.dart';
+import 'package:kallcenter/Core/Function/HandlingData.dart';
 import 'package:kallcenter/Core/Services/Storage.dart';
+import 'package:kallcenter/Data/API/User.dart';
+import 'package:kallcenter/Data/model/Statistics_Model.dart';
 import 'package:kallcenter/Data/model/User.dart';
 
 abstract class DashboardController extends GetxController {
   commandePaimment(bool val);
   selectStores();
   switchCommandAndPaimment();
+  getallcommandes();
+  getprice();
 }
 
 class DashboardControllerImp extends DashboardController {
   ///// for storage
   MyStorage storage = Get.find();
   late User_Model user;
+  StatusRequest status = StatusRequest.success;
   SizeScreenConfig size = Get.find();
   late String store;
   late bool swit;
+  UserAPI api = Get.find();
   bool Commande = true;
+  List<Statistics_Model> statistics = [];
   @override
-  void onInit() {
+  Future<void> onInit() async {
     // TODO: implement onInit
     user = storage.getUser();
     swit = true;
     store = user.stores[0].name!;
     print(user.stores[0].name!);
+    await getallcommandes();
     super.onInit();
   }
 
@@ -42,8 +53,8 @@ class DashboardControllerImp extends DashboardController {
   @override
   selectStores() {
     // MyDialog.Seccess("choisie votre store", () => null, textbtn)
-    storage.delete();
-    Get.offNamed(RoutesApp.Login);
+    // storage.delete();
+    // Get.offNamed(RoutesApp.Login);
 
     // Get.dialog(
     //   Dialog(
@@ -126,5 +137,64 @@ class DashboardControllerImp extends DashboardController {
   @override
   switchCommandAndPaimment() {
     Commande = !Commande;
+    update();
+    print(Commande);
+  }
+
+  @override
+  Future<void> getallcommandes() async {
+    status = StatusRequest.loading;
+    update();
+    var response = await api.getstatistic(user);
+    var data = response.fold((l) => l, (r) => r);
+    // Check if the response is a StatusRequest or data
+    status = handlingData(data);
+    // Check the status
+    if (status == StatusRequest.success) {
+      statistics = data;
+      update();
+    } else if (status == StatusRequest.offlinefailure) {
+      ShowDefaultDialog(Get.context!, actions: [
+        // ElevatedButton(
+        //   onPressed: () {
+        //     Get.back(); // Close the dialog
+        //     Get.back();
+        //   },
+        //   child: const Text('retourne'),
+        // ),
+        ElevatedButton(
+          onPressed: () async {
+            Get.back(); // Close the dialog
+            await getallcommandes();
+          },
+          child: const Text('essayez'),
+        ),
+      ]); // Correct way to call the dialog function
+    } else if (status == StatusRequest.serveurfailure) {
+      ShowDefaultDialog(Get.context!,
+          title: "problem du serveur",
+          middleText: "essayez une autre fois",
+          actions: [
+            // ElevatedButton(
+            //   onPressed: () {
+            //     Get.back(); // Close the dialog
+            //   },
+            //   child: const Text('retourne'),
+            // ),
+            ElevatedButton(
+              onPressed: () async {
+                await getallcommandes(); // Close the dialog
+              },
+              child: const Text('essayez'),
+            ),
+          ]);
+      print("problem in server");
+    }
+  }
+
+  @override
+  getprice() {
+    // TODO: implement getprice
+    throw UnimplementedError();
   }
 }

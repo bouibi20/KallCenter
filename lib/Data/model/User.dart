@@ -9,7 +9,7 @@ class User_Model {
   User_Model(this.email, this.name, this.image, this.stores, this.token);
 
   User_Model.fromJson(Map<String, dynamic> json) {
-    token = json['access_token'];
+    token = "Bearer ${json['access_token']}";
     json = json["data"];
     email = json['email'];
     name = json['name'];

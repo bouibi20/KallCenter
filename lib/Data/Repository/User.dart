@@ -9,6 +9,9 @@ import 'package:kallcenter/Data/model/User.dart';
 abstract class User_Repository {
   Future<Either<StatusRequest, dynamic>> Login(
       String username, String password);
+  Future<Either<StatusRequest, dynamic>> getstatistic(User_Model users);
+  Future<Either<StatusRequest, dynamic>> getOrder(
+      int idStore, User_Model users);
   // Future<Either<StatusRequest, dynamic>> CheckStatus(User_Model User);
   // Future<Either<StatusRequest, dynamic>> Payment(
   //     User_Model User, int idPlant, double prix, File image);
